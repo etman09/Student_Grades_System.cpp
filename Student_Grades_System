@@ -1,0 +1,138 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+public:
+    string name;
+    int id;
+    double grade;
+
+    void print() {
+        cout << id << " | " << name << " | " << grade << endl;
+    }
+};
+
+double totalGrades(Student arr[], int n) {
+    if (n == 0) return 0; 
+    return arr[n - 1].grade + totalGrades(arr, n - 1);
+}
+
+int main() {
+    Student arr[100]; 
+    int count = 0; 
+    int choice;
+
+    do {
+        cout << "\n--- Student Grades System (Dev: MOHAMED ETMAN) ---\n";
+        cout << "1. Add Student\n2. Display All\n3. Sort by Grade & Rank\n";
+        cout << "4. Linear Search by Name\n5. Binary Search by ID\n6. Statistics\n0. Exit\n";
+        cout << "Choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            cout << "Enter Name: ";
+            cin >> arr[count].name;
+            cout << "Enter ID: ";
+            cin >> arr[count].id;
+            cout << "Enter Grade: ";
+            cin >> arr[count].grade;
+            count++;
+            cout << "Student added!\n";
+        }
+        else if (choice == 2) {
+            for (int i = 0; i < count; i++) {
+                arr[i].print();
+            }
+        }
+        else if (choice == 3) {
+            // Bubble Sort by Grade (Descending) - O(n^2)
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = 0; j < count - i - 1; j++) {
+                    if (arr[j].grade < arr[j + 1].grade) {
+                        swap(arr[j], arr[j + 1]);
+                    }
+                }
+            }
+            cout << "Students sorted by grade!\n";
+            for (int i = 0; i < count; i++) {
+                cout << "Rank " << i + 1 << ": " << arr[i].name << " (" << arr[i].grade << ")\n";
+            }
+        }
+        else if (choice == 4) {
+            string target;
+            cout << "Enter Name to search: ";
+            cin >> target;
+            
+            int comps = 0;
+            bool found = false;
+            
+            for (int i = 0; i < count; i++) {
+                comps++;
+                if (arr[i].name == target) {
+                    cout << "Found: ";
+                    arr[i].print();
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) cout << "Not found.\n";
+            cout << "Comparisons made: " << comps << "\n";
+        }
+        else if (choice == 5) {
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = 0; j < count - i - 1; j++) {
+                    if (arr[j].id > arr[j + 1].id) {
+                        swap(arr[j], arr[j + 1]);
+                    }
+                }
+            }
+
+            int target;
+            cout << "Enter ID to search: ";
+            cin >> target;
+            
+            int left = 0, right = count - 1, comps = 0;
+            bool found = false;
+
+            while (left <= right) {
+                comps++;
+                int mid = (left + right) / 2;
+                
+                if (arr[mid].id == target) {
+                    cout << "Found: ";
+                    arr[mid].print();
+                    found = true;
+                    break;
+                }
+                else if (arr[mid].id < target) {
+                    left = mid + 1;
+                }
+                else {
+                    right = mid - 1;
+                }
+            }
+if (!found) cout << "Not found.\n";
+            cout << "Comparisons made: " << comps << "\n";
+        }
+        else if (choice == 6) {
+            if (count > 0) {
+
+                for (int i = 0; i < count - 1; i++) {
+                    for (int j = 0; j < count - i - 1; j++) {
+                        if (arr[j].grade < arr[j + 1].grade) {
+                            swap(arr[j], arr[j + 1]);
+                        }
+                    }
+                }
+                double total = totalGrades(arr, count);
+                cout << "Highest Grade: " << arr[0].grade << " (" << arr[0].name << ")\n";
+                cout << "Lowest Grade: " << arr[count - 1].grade << " (" << arr[count - 1].name << ")\n";
+                cout << "Class Average: " << total / count << "\n";
+            }
+        }
+    } while (choice != 0);
+
+    return 0;
+}
+
